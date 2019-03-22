@@ -1,0 +1,8 @@
+.terraform
+terraform.tfvars
+beanstalk_ec2_sg.tf
+elb_sg.tf
+rds_sg.tf
+sg.plan
+.idea/*
+.idea/
