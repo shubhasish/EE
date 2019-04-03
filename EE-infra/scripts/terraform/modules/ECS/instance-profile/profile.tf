@@ -1,11 +1,4 @@
-resource "aws_ecs_cluster" "this" {
-  count = "${var.create_ecs ? 1 : 0}"
-
-  name = "${var.name}"
-  tags = "${var.tags}"
-}
-
-resource "aws_iam_role" "this" {
+resource "aws_iam_role" "ecs_iam_role" {
   name = "${var.name}_ecs_instance_role"
   path = "/ecs/"
 
@@ -25,17 +18,17 @@ resource "aws_iam_role" "this" {
 EOF
 }
 
-resource "aws_iam_instance_profile" "this" {
+resource "aws_iam_instance_profile" "ecs_instance_profile" {
   name = "${var.name}_ecs_instance_profile"
-  role = "${aws_iam_role.this.name}"
+  role = "${aws_iam_role.ecs_iam_role.name}"
 }
 
 resource "aws_iam_role_policy_attachment" "ecs_ec2_role" {
-  role       = "${aws_iam_role.this.id}"
+  role       = "${aws_iam_role.ecs_iam_role.id}"
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonEC2ContainerServiceforEC2Role"
 }
 
 resource "aws_iam_role_policy_attachment" "ecs_ec2_cloudwatch_role" {
-  role       = "${aws_iam_role.this.id}"
+  role       = "${aws_iam_role.ecs_iam_role.id}"
   policy_arn = "arn:aws:iam::aws:policy/CloudWatchLogsFullAccess"
 }
